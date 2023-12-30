@@ -1,7 +1,7 @@
 from app import app
 
 from db import dataBase
-from flask import redirect, url_for, jsonify, request
+from flask import jsonify, request
 
 """
 Use 'request' package for work with API.
@@ -74,11 +74,3 @@ def depth_access():
         return jsonify({'depth-range': [min_depth, max_depth]}), 200
     except ConnectionError:
         return jsonify({'depth-range': None}), 522
-
-
-# test route
-# @app.route('/temperature/times', methods=['GET'])
-# def times_access():
-#     args = request.args
-#     times = dataBase.get_times(args['time_start'], args['time_end'], args['place'])
-#     return jsonify({'times': times}), 200

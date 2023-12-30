@@ -21,10 +21,8 @@ class WorkerDB:
     def post_data(self, data: dict):
 
         """
-        :param data: dict with keys ['time', 'depth', 'temp', 'place']
+        :param data: dictionary with time value, depth array, temperature array and place value
         :return: None
-
-        Post temperature data to the database
         """
 
         if len(data['depth']) > 0:
@@ -44,14 +42,17 @@ class WorkerDB:
                     VALUES '''.format(self.tab) + '{}').format(sql.SQL(',').join(map(sql.Literal, values)))
                     cursor.execute(insert)
 
-    def get_data(
-            self,
-            time_start: float,
-            time_end: float,
-            place: str,
-            depth_min: float,
-            depth_max: float
-    ) -> dict[str, list]:
+    def get_data(self, time_start: float, time_end: float, place: str,
+                 depth_min: float, depth_max: float) -> dict[str: list]:
+
+        """
+        :param time_start: time in timestamp format
+        :param time_end: time in timestamp format
+        :param place: well name
+        :param depth_min: minimal allowed depth value
+        :param depth_max: maximal allowed depth value
+        :return: dict with temperature matrix, list of depth and list of times in timestamp format
+        """
 
         try:
             with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
@@ -90,9 +91,7 @@ class WorkerDB:
     def get_places(self) -> list[str]:
 
         """
-        :return: list
-
-        Get all wells names there are in database
+        :return: list with all names of wells
         """
 
         try:
@@ -114,14 +113,14 @@ class WorkerDB:
             raise ConnectionError('Unable to connect to database')
 
     def get_max_depth(self, time_start: float, time_end: float, place: str) -> float:
-        """
-        :param time_start: float
-        :param time_end: float
-        :param place: str
-        :return: float
 
-        Get maximum allowed depth value
         """
+        :param time_start: time in timestamp format
+        :param time_end: time in timestamp format
+        :param place: well name
+        :return: maximal allowed depth value
+        """
+
         try:
             with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
                 with conn.cursor(cursor_factory=DictCursor) as cursor:
@@ -139,14 +138,14 @@ class WorkerDB:
             raise ConnectionError('Unable to connect to database')
 
     def get_min_depth(self, time_start: float, time_end: float, place: str) -> float:
-        """
-        :param time_start: float
-        :param time_end: float
-        :param place: str
-        :return: float
 
-        Get minimum allowed depth value
         """
+        :param time_start: time in timestamp format
+        :param time_end: time in timestamp format
+        :param place: well name
+        :return: minimal allowed depth value
+        """
+
         try:
             with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
                 with conn.cursor(cursor_factory=DictCursor) as cursor:
@@ -159,34 +158,6 @@ class WorkerDB:
                     cursor.execute(select)
                     result = cursor.fetchall()
                     return max(result)[0]
-
-        except psycopg2.OperationalError:
-            raise ConnectionError('Unable to connect to database')
-
-    def get_times(self, time_start: float, time_end: float, place: str) -> np.array:
-
-        """
-        :param time_start: float (timestamp)
-        :param time_end: float (timestamp)
-        :param place: str
-        :return: np.array
-        """
-
-        try:
-            with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
-                with conn.cursor(cursor_factory=DictCursor) as cursor:
-                    select = """
-                    SELECT DISTINCT time
-                    FROM {0}
-                    WHERE time > {1} AND time < {2} AND place = '{3}';
-                    """.format(self.tab, time_start, time_end, place)
-                    cursor.execute(select)
-                    result = cursor.fetchall()
-
-                    if len(result) == 0:
-                        raise ValueError('No data for the selected time period')
-                    else:
-                        return np.array(result).T[0]
 
         except psycopg2.OperationalError:
             raise ConnectionError('Unable to connect to database')
