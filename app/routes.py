@@ -23,10 +23,12 @@ response = requests.get(
 
 @app.route('/temperature/data', methods=['GET', 'POST'])
 def data_access():
+
     if request.method == 'GET':
         args = request.args
         print(args['name'])
         return args
+
     if request.method == 'POST':
         if request.json:
             new_data = {
@@ -48,6 +50,17 @@ def places_access():
         return jsonify({'places': None}), 200
     except ConnectionError:
         return jsonify({'places': None}), 522
+
+
+@app.route('/temperature/depth-range', methods=['GET'])
+def depth_access():
+    try:
+        args = request.args
+        min_depth = dataBase.get_min_depth(args['time_start'], args['time_end'], args['place'])
+        max_depth = dataBase.get_max_depth(args['time_start'], args['time_end'], args['place'])
+        return jsonify({'depth-range': [min_depth, max_depth]}), 200
+    except ConnectionError:
+        return jsonify({'depth-range': None}), 522
 
 
 # test route

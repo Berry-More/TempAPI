@@ -70,15 +70,50 @@ class WorkerDB:
         except psycopg2.OperationalError:
             raise ConnectionError('Unable to connect to database')
 
-    def get_depth_range(self, time_start: float, time_end: float, place: str) -> tuple[float, float]:
+    def get_max_depth(self, time_start: float, time_end: float, place: str) -> float:
+        """
+        :param time_start: float
+        :param time_end: float
+        :param place: str
+        :return: float
+
+        Get maximum allowed depth value
+        """
         try:
             with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
                 with conn.cursor(cursor_factory=DictCursor) as cursor:
                     select = """
-                    SELECT DISTINCT time
+                    SELECT DISTINCT MAX(depth)
                     FROM {0}
                     WHERE time > {1} AND time < {2} AND place = '{3}';
-                    """
+                    """.format(self.tab, time_start, time_end, place)
+                    cursor.execute(select)
+                    result = cursor.fetchall()
+                    return min(result)[0]
+
+        except psycopg2.OperationalError:
+            raise ConnectionError('Unable to connect to database')
+
+    def get_min_depth(self, time_start: float, time_end: float, place: str) -> float:
+        """
+        :param time_start: float
+        :param time_end: float
+        :param place: str
+        :return: float
+
+        Get minimum allowed depth value
+        """
+        try:
+            with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
+                with conn.cursor(cursor_factory=DictCursor) as cursor:
+                    select = """
+                    SELECT DISTINCT Min(depth)
+                    FROM {0}
+                    WHERE time > {1} AND time < {2} AND place = '{3}';
+                    """.format(self.tab, time_start, time_end, place)
+                    cursor.execute(select)
+                    result = cursor.fetchall()
+                    return max(result)[0]
 
         except psycopg2.OperationalError:
             raise ConnectionError('Unable to connect to database')
