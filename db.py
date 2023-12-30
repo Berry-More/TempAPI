@@ -44,6 +44,49 @@ class WorkerDB:
                     VALUES '''.format(self.tab) + '{}').format(sql.SQL(',').join(map(sql.Literal, values)))
                     cursor.execute(insert)
 
+    def get_data(
+            self,
+            time_start: float,
+            time_end: float,
+            place: str,
+            depth_min: float,
+            depth_max: float
+    ) -> dict[str, list]:
+
+        try:
+            with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
+                with conn.cursor(cursor_factory=DictCursor) as cursor:
+                    select = """
+                    SELECT DISTINCT time, depth, temp
+                    FROM {0}
+                    WHERE time > {1} AND time < {2} AND place = '{3}' AND depth >= {4} AND depth <= {5};
+                    """.format(self.tab, time_start, time_end, place, depth_min, depth_max)
+                    cursor.execute(select)
+                    result = np.array(cursor.fetchall()).T
+
+                    if len(result) == 0:
+                        raise FileNotFoundError('No data in the selected interval')
+
+                    num_of_measurements = np.count_nonzero(result[1] == float(depth_min))
+                    data_dict = {'time': result[0], 'depth': result[1], 'temp': result[2]}
+                    df = pd.DataFrame(data_dict).sort_values(['time', 'depth'])
+                    numpy_data = df.to_numpy()
+
+                    if len(numpy_data) % num_of_measurements != 0:
+                        raise ValueError('Bad matrix length')
+
+                    output_data = np.reshape(
+                        numpy_data.T,
+                        (3, num_of_measurements, int(len(numpy_data) / num_of_measurements))
+                    )
+
+                    return dict(time=output_data[0].T[0].tolist(),
+                                depth=output_data[1][0].tolist(),
+                                temp=output_data[2].T.tolist())
+
+        except psycopg2.OperationalError:
+            raise ConnectionError('Unable to connect to database')
+
     def get_places(self) -> list[str]:
 
         """
@@ -85,7 +128,8 @@ class WorkerDB:
                     select = """
                     SELECT DISTINCT MAX(depth)
                     FROM {0}
-                    WHERE time > {1} AND time < {2} AND place = '{3}';
+                    WHERE time > {1} AND time < {2} AND place = '{3}'
+                    GROUP BY time;
                     """.format(self.tab, time_start, time_end, place)
                     cursor.execute(select)
                     result = cursor.fetchall()
@@ -107,9 +151,10 @@ class WorkerDB:
             with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
                 with conn.cursor(cursor_factory=DictCursor) as cursor:
                     select = """
-                    SELECT DISTINCT Min(depth)
+                    SELECT DISTINCT MIN(depth)
                     FROM {0}
-                    WHERE time > {1} AND time < {2} AND place = '{3}';
+                    WHERE time > {1} AND time < {2} AND place = '{3}'
+                    GROUP BY time;
                     """.format(self.tab, time_start, time_end, place)
                     cursor.execute(select)
                     result = cursor.fetchall()

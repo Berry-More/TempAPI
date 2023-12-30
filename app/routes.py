@@ -26,8 +26,21 @@ def data_access():
 
     if request.method == 'GET':
         args = request.args
-        print(args['name'])
-        return args
+        try:
+            data = dataBase.get_data(
+                args['time_start'],
+                args['time_end'],
+                args['place'],
+                args['depth_min'],
+                args['depth_max'],
+            )
+            return jsonify(data), 200
+        except ValueError:
+            return jsonify({'time': [], 'depth': [], 'temp': []}), 400
+        except FileNotFoundError:
+            return jsonify({'time': [], 'depth': [], 'temp': []}), 404
+        except ConnectionError:
+            return jsonify({'time': [], 'depth': [], 'temp': []}), 522
 
     if request.method == 'POST':
         if request.json:
@@ -47,7 +60,7 @@ def places_access():
         places = dataBase.get_places()
         return jsonify({'places': places}), 200
     except ValueError:
-        return jsonify({'places': None}), 200
+        return jsonify({'places': None}), 404
     except ConnectionError:
         return jsonify({'places': None}), 522
 
