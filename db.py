@@ -60,25 +60,21 @@ class WorkerDB:
                     select = """
                     SELECT DISTINCT time, depth, temp
                     FROM {0}
-                    WHERE time > {1} AND time < {2} AND place = '{3}' AND depth >= {4} AND depth <= {5};
-                    """.format(self.tab, time_start, time_end, place, depth_min, depth_max)
+                    WHERE time > {1} AND time < {2} AND place = '{3}' AND depth >= {4} AND depth <= {5}
+                    ORDER BY time, depth""".format(self.tab, time_start, time_end, place, depth_min, depth_max)
                     cursor.execute(select)
-                    result = np.array(cursor.fetchall()).T
+                    result = np.array(cursor.fetchall())
 
                     if len(result) == 0:
                         raise FileNotFoundError('No data in the selected interval')
 
-                    num_of_measurements = np.count_nonzero(result[1] == float(depth_min))
-                    data_dict = {'time': result[0], 'depth': result[1], 'temp': result[2]}
-                    df = pd.DataFrame(data_dict).sort_values(['time', 'depth'])
-                    numpy_data = df.to_numpy()
-
-                    if len(numpy_data) % num_of_measurements != 0:
+                    num_of_measurements = np.count_nonzero(result.T[1] == float(depth_min))
+                    if len(result) % num_of_measurements != 0:
                         raise ValueError('Bad matrix length')
 
                     output_data = np.reshape(
-                        numpy_data.T,
-                        (3, num_of_measurements, int(len(numpy_data) / num_of_measurements))
+                        result.T,
+                        (3, num_of_measurements, int(len(result) / num_of_measurements))
                     )
 
                     return dict(time=output_data[0].T[0].tolist(),
