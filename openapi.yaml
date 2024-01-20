@@ -1,0 +1,273 @@
+openapi: 3.0.3
+info:
+  title: Temp API
+  description: Temperature API for DTS monitoring APP
+  version: 1.0.11
+servers:
+  - url: http://84.237.52.214:4002
+tags:
+  - name: temperature
+    description: All information about temperature measurements
+  - name: places
+    description: All information about wells
+  - name: depth-range
+    description: Get allowed depth interval
+paths:
+  /temperature/data:
+    get:
+      tags:
+        - temperature
+      summary: Get temperature by time interval, depth interval and well name
+      operationId: getTempData
+      parameters:
+        - name: time_start
+          in: query
+          description: First time of interval in time stamp
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: time_end
+          in: query
+          description: Second time of interval in time stamp
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: depth_min
+          in: query
+          description: Min value of depth interval
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: depth_max
+          in: query
+          description: Max value of depth interval
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: place
+          in: query
+          description: Well name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Temperature'
+        '400':
+          description: Matrix reshape error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemperatureError'
+        '404':
+          description: No data in selected time interval and place
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemperatureError'
+        '522':
+          description: Failed to connect to data base
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemperatureError'
+    post:
+      tags:
+        - temperature
+      summary: Updates new temperature data in data base
+      operationId: postTempData
+      parameters:
+        - name: time
+          in: query
+          description: Time of measurement in time stamp
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: depth
+          in: query
+          description: Array of depth where was measured temperatures
+          required: true
+          schema:
+            type: array
+            items:
+              type: number
+        - name: temp
+          in: query
+          description: Array of temperature measurements corresponding to depth
+          required: true
+          schema:
+            type: array
+            items:
+              type: number
+        - name: place
+          in: query
+          description: Name of well
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Successful operation
+  /temperature/places:
+    get:
+      tags:
+        - places
+      summary: Get all places existing in data base
+      operationId: getPlaces
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Places'
+        '400':
+          description: No wells availible
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlacesError'
+        '522':
+          description: Failed to connect to data base
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlacesError'
+  /temperature/depth-range:
+    get:
+      tags:
+        - depth-range
+      summary: Get allowed depth range
+      operationId: getDepthRange
+      parameters:
+        - name: time_start
+          in: query
+          description: First time of interval in time stamp
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: time_end
+          in: query
+          description: Second time of interval in time stamp
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: place
+          in: query
+          description: Well name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepthRange'
+        '522':
+          description: Failed to connect to data base
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepthRangeError'
+components:
+  schemas:
+    Temperature:
+      type: object
+      properties:
+        time:
+          type: array
+          items:
+            type: integer
+          example:
+            - 1705414213
+            - 1705416215
+        depth:
+          type: array
+          items:
+            type: integer
+          example:
+            - 0
+            - 2
+            - 4
+        temp:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          example:
+            - - 15.5
+              - 14.7
+              - -10.5
+            - - 15.1
+              - 14.9
+              - -9.1
+    TemperatureError:
+      type: object
+      properties:
+        time:
+          type: array
+          items:
+            type: integer
+          example: []
+        depth:
+          type: array
+          items:
+            type: integer
+          example: []
+        temp:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          example: []
+    Places:
+      type: object
+      properties:
+        places:
+          type: array
+          items:
+            type: string
+          example:
+            - Kluchi
+            - NSU
+    PlacesError:
+      type: object
+      properties:
+        places:
+          type: array
+          items:
+            type: string
+          example: None
+    DepthRange:
+      type: object
+      properties:
+        places:
+          type: array
+          items:
+            type: number
+          example:
+            - 0
+            - 1000
+    DepthRangeError:
+      type: object
+      properties:
+        places:
+          type: array
+          items:
+            type: number
+          example: None
