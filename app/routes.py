@@ -27,13 +27,8 @@ def data_access():
     if request.method == 'GET':
         args = request.args
         try:
-            data = dataBase.get_data(
-                args['time_start'],
-                args['time_end'],
-                args['place'],
-                args['depth_min'],
-                args['depth_max'],
-            )
+            data = dataBase.get_data(args['time_start'], args['time_end'], args['place'],
+                                     args['depth_min'], args['depth_max'])
             return jsonify(data), 200
         except ValueError:
             return jsonify({'time': [], 'depth': [], 'temp': []}), 400
@@ -48,7 +43,7 @@ def data_access():
                 'time': request.json['time'],
                 'depth': request.json['depth'],
                 'temp': request.json['temp'],
-                'place': request.json['places']
+                'place': request.json['place']
             }
             dataBase.post_data(new_data)
             return 'created', 201
