@@ -59,6 +59,40 @@ def places_access():
     except ConnectionError:
         return jsonify({'places': None}), 522
 
+@app.route('/temperature/wells', methods=['GET', 'POST', 'DELETE'])
+def wells_access():
+    if request.method == 'GET':
+        try:
+            wells = dataBase.get_wells()
+            return jsonify({'places': wells}), 200
+        except ValueError:
+            return jsonify({'places': None}), 404
+        except ConnectionError:
+            return jsonify({'places': None}), 522
+
+    if request.method == 'POST':
+        if request.json:
+            new_well = {
+                'name': request.json['name'],
+                'latitude': request.json['latitude'],
+                'longitude': request.json['longitude'],
+                'interval_start': request.json['interval_start'],
+                'interval_end': request.json['interval_end'],
+                'interval_value': request.json['interval_value'],
+                'status': request.json['status'],
+            }
+            dataBase.post_well(new_well)
+            return 'created', 201
+
+    if request.method == 'DELETE':
+        args = request.args
+        try:
+            well_id = args['well_id']
+            dataBase.delete_well(well_id)
+            return 'deleted', 200
+        except ConnectionError:
+            return 'has not deleted', 522
+
 
 @app.route('/temperature/depth-range', methods=['GET'])
 def depth_access():
