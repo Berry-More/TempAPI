@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import DictCursor
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from flask import request
 
 from WorkerDB.constants import DBNAME, USER, PASSWORD, HOST, DATA_TAB, WELL_TAB
 
@@ -20,6 +21,20 @@ class Well:
 class WellWorker:
     def __init__(self):
         pass
+
+    @staticmethod
+    def request_to_well(post_request: request) -> Well:
+        well = Well(
+            id=0,
+            name=post_request.json['name'],
+            latitude=post_request.json['latitude'],
+            longitude=post_request.json['longitude'],
+            interval_start=post_request.json['interval_start'],
+            interval_end=post_request.json['interval_end'],
+            interval_value=post_request.json['interval_value'],
+            status=post_request.json['status']
+        )
+        return well
 
     @staticmethod
     def post_well(data: Well):
@@ -57,7 +72,7 @@ class WellWorker:
                 cursor.execute(request_sql)
 
     @staticmethod
-    def get_wells() -> list[Well]:
+    def get_wells() -> list[dict]:
 
         """
         :return: list of Well objects
@@ -79,10 +94,9 @@ class WellWorker:
                         return result
                     else:
                         for i in get_result:
-                            result.append(
-                                Well(id=i[0], name=i[1], latitude=i[2], longitude=i[3],
-                                     interval_start=i[4], interval_end=i[5], interval_value=i[6], status=i[7])
-                            )
+                            well_object = Well(id=i[0], name=i[1], latitude=i[2], longitude=i[3],
+                                               interval_start=i[4], interval_end=i[5], interval_value=i[6], status=i[7])
+                            result.append(asdict(well_object))
             return result
 
         except psycopg2.OperationalError:
