@@ -1,6 +1,7 @@
 import psycopg2
 import numpy as np
 from psycopg2.extras import DictCursor
+from dataclasses import asdict
 
 from Modules.constants import DBNAME, USER, PASSWORD, HOST, DATA_TAB
 from Modules.Data.DataArray import DataArray
@@ -45,7 +46,11 @@ class DataWorker:
         return data_object
 
     @staticmethod
-    def get_last_data(well_name):
+    def get_last_data(well_name: str) -> DataArray:
         raw_data = DataWorker._get_raw_last_data(well_name)
         data_object = DataWorker._process_raw_last_data(raw_data, well_name)
         return data_object
+
+    @staticmethod
+    def class_to_dict(data: DataArray) -> dict:
+        return asdict(data)
