@@ -50,17 +50,6 @@ def data_access():
             return 'created', 201
 
 
-@app.route('/temperature/places', methods=['GET'])
-def places_access():
-    try:
-        places = dataBase.get_places()
-        return jsonify({'places': places}), 200
-    except ValueError:
-        return jsonify({'places': None}), 404
-    except ConnectionError:
-        return jsonify({'places': None}), 522
-
-
 @app.route('/temperature/wells', methods=['GET', 'POST', 'DELETE'])
 def wells_access():
     worker = WellWorker()
@@ -88,14 +77,3 @@ def wells_access():
             return 'deleted', 200
         except ConnectionError:
             return 'has not deleted', 522
-
-
-@app.route('/temperature/depth-range', methods=['GET'])
-def depth_access():
-    try:
-        args = request.args
-        min_depth = dataBase.get_min_depth(args['time_start'], args['time_end'], args['place'])
-        max_depth = dataBase.get_max_depth(args['time_start'], args['time_end'], args['place'])
-        return jsonify({'depth-range': [min_depth, max_depth]}), 200
-    except ConnectionError:
-        return jsonify({'depth-range': None}), 522
