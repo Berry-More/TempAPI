@@ -1,36 +1,25 @@
 from app import app
 from flask import jsonify, request
 
-from Modules.DBWorker.db import dataBase
 from Modules.DBWorker.WellWorker import WellWorker
+from Modules.DBWorker.DataWorker import DataWorker
 
 
-@app.route('/temperature/data', methods=['GET', 'POST'])
+@app.route('/temperature/data', methods=['GET'])
 def data_access():
+    worker = DataWorker()
 
     if request.method == 'GET':
         args = request.args
         try:
-            data = dataBase.get_data(args['time_start'], args['time_end'], args['place'],
-                                     args['depth_min'], args['depth_max'])
+            data = worker.get_last_data(args['well_name'])
             return jsonify(data), 200
         except ValueError:
-            return jsonify({'time': [], 'depth': [], 'temp': []}), 400
+            return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 400
         except FileNotFoundError:
-            return jsonify({'time': [], 'depth': [], 'temp': []}), 404
+            return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 404
         except ConnectionError:
-            return jsonify({'time': [], 'depth': [], 'temp': []}), 522
-
-    if request.method == 'POST':
-        if request.json:
-            new_data = {
-                'time': request.json['time'],
-                'depth': request.json['depth'],
-                'temp': request.json['temp'],
-                'place': request.json['place']
-            }
-            dataBase.post_data(new_data)
-            return 'created', 201
+            return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 522
 
 
 @app.route('/temperature/wells', methods=['GET', 'POST', 'DELETE'])
