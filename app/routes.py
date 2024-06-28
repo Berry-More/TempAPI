@@ -1,6 +1,6 @@
 from app import app
 
-from db import dataBase
+from WorkerDB.db import dataBase
 from flask import jsonify, request
 
 """
