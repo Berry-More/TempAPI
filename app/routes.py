@@ -4,23 +4,6 @@ from flask import jsonify, request
 from Modules.DBWorker.db import dataBase
 from Modules.DBWorker.WellWorker import WellWorker
 
-"""
-Use 'request' package for work with API.
-
-Example: 
-
-params = {
-    'time_start': start_time, 
-    'time_end': end_time, 
-    'place': 'Kluchi'
-}
-
-response = requests.get(
-    'http://127.0.0.1:5000/temperature/times', 
-    params=params
-)
-"""
-
 
 @app.route('/temperature/data', methods=['GET', 'POST'])
 def data_access():
