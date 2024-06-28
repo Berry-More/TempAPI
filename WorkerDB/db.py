@@ -108,61 +108,6 @@ class WorkerDB:
         except psycopg2.OperationalError:
             raise ConnectionError('Unable to connect to database')
 
-    def post_well(self, data: dict):
-
-        """
-        :param data: dictionary with information about well
-        """
-
-        with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
-            with conn.cursor(cursor_factory=DictCursor) as cursor:
-                cursor.execute("""
-                INSERT INTO {0} (name, latitude, longitude, interval_start, interval_end, interval_value, status)
-                VALUES (%s, %s, %s, %s, %s, %s, %s);
-                """.format(self.tab_well), (data['name'], data['latitude'], data['longitude'], data['interval_start'],
-                                            data['interval_end'], data['interval_value'], data['status']))
-
-    def delete_well(self, well_id: int):
-
-        """
-        :param well_id: well id in database
-        """
-
-        with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
-            with conn.cursor(cursor_factory=DictCursor) as cursor:
-                cursor.execute("""
-                DELETE FROM {0}
-                WHERE id = {1};
-                """.format(self.tab_well, well_id))
-
-    def get_wells(self) -> list[dict]:
-
-        """
-        :return: list of dictionaries with information about all wells
-        """
-
-        try:
-            result = []
-            with psycopg2.connect(dbname=self.dbname, user=self.user, password=self.password, host=self.host) as conn:
-                with conn.cursor(cursor_factory=DictCursor) as cursor:
-                    cursor.execute("""
-                        SELECT id, name, latitude, longitude, interval_start, interval_end, interval_value, status
-                        FROM {0};
-                        """.format(self.tab_well))
-                    get_result = cursor.fetchall()
-
-                    if len(get_result) == 0:
-                        return result
-                    else:
-                        for i in get_result:
-                            result.append(
-                                {'id': i[0], 'name': i[1], 'latitude': i[2], 'longitude': i[3], 'interval_start': i[4],
-                                 'interval_end': i[5], 'interval_value': i[6], 'status': i[7]})
-            return result
-
-        except psycopg2.OperationalError:
-            raise ConnectionError('Unable to connect to database')
-
     def get_max_depth(self, time_start: float, time_end: float, place: str) -> float:
 
         """
