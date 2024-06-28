@@ -59,16 +59,17 @@ def places_access():
     except ConnectionError:
         return jsonify({'places': None}), 522
 
+
 @app.route('/temperature/wells', methods=['GET', 'POST', 'DELETE'])
 def wells_access():
     if request.method == 'GET':
         try:
             wells = dataBase.get_wells()
-            return jsonify({'places': wells}), 200
+            return jsonify({'wells': wells}), 200
         except ValueError:
-            return jsonify({'places': None}), 404
+            return jsonify({'wells': None}), 404
         except ConnectionError:
-            return jsonify({'places': None}), 522
+            return jsonify({'wells': None}), 522
 
     if request.method == 'POST':
         if request.json:
