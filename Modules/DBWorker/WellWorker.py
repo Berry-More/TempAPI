@@ -1,21 +1,10 @@
 import psycopg2
 from psycopg2.extras import DictCursor
-from dataclasses import dataclass, asdict
+from dataclasses import asdict
 from flask import request
 
-from WorkerDB.constants import DBNAME, USER, PASSWORD, HOST, WELL_TAB
-
-
-@dataclass
-class Well:
-    id: int
-    name: str
-    latitude: float
-    longitude: float
-    interval_start: float
-    interval_end: float
-    interval_value: float
-    status: str
+from Modules.constants import DBNAME, USER, PASSWORD, HOST, WELL_TAB
+from Modules.Data.Well import Well
 
 
 class WellWorker:
