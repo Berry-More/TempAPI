@@ -39,8 +39,8 @@ class DataWorker:
         trans_data = np.array(raw_data).T
         data_object = DataArray(
             time=trans_data[0][0],
-            depth=trans_data[1],
-            temp=trans_data[2],
+            depth=list(trans_data[1]),
+            temp=list(trans_data[2]),
             place=well_name
         )
         return data_object
@@ -50,7 +50,3 @@ class DataWorker:
         raw_data = DataWorker._get_raw_last_data(well_name)
         data_object = DataWorker._process_raw_last_data(raw_data, well_name)
         return data_object
-
-    @staticmethod
-    def class_to_dict(data: DataArray) -> dict:
-        return asdict(data)
