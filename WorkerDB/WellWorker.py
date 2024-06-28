@@ -3,7 +3,7 @@ from psycopg2.extras import DictCursor
 from dataclasses import dataclass, asdict
 from flask import request
 
-from WorkerDB.constants import DBNAME, USER, PASSWORD, HOST, DATA_TAB, WELL_TAB
+from WorkerDB.constants import DBNAME, USER, PASSWORD, HOST, WELL_TAB
 
 
 @dataclass

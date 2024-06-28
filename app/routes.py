@@ -2,7 +2,7 @@ from app import app
 from flask import jsonify, request
 
 from WorkerDB.db import dataBase
-from WorkerDB import WellWorker
+from WorkerDB.WellWorker import WellWorker
 
 """
 Use 'request' package for work with API.
