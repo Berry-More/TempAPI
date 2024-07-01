@@ -1,7 +1,6 @@
 import psycopg2
 import numpy as np
 from psycopg2.extras import DictCursor
-from dataclasses import asdict
 
 from Modules.constants import DBNAME, USER, PASSWORD, HOST, DATA_TAB
 from Modules.Data.DataArray import DataArray
