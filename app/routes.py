@@ -16,6 +16,8 @@ def data_access():
             return jsonify(data), 200
         except ValueError:
             return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 400
+        except IndexError:
+            return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 404
         except FileNotFoundError:
             return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 404
         except ConnectionError:

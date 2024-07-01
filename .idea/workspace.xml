@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bcf5fc05-9824-4017-861e-e6b87136f8a3" name="Changes" comment="Создана новая ветка для обновления функционала под геотехнический мониторинг">
+      <change beforePath="$PROJECT_DIR$/app/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2a2l8VDXec5gDJXDmXl1mYNogWj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;geotech&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Temp/Work/Python/__Main projects/DTS Monitoring/FlaskDashApplication&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Temp\Work\Python\__Main projects\DTS Monitoring\TempAPI\Modules\DBWorker" />
+      <recent name="D:\Temp\Work\Python\__Main projects\DTS Monitoring\TempAPI\WorkerDB" />
+      <recent name="D:\Temp\Work\Python\__Main projects\DTS Monitoring\TempAPI\flask_app" />
+      <recent name="D:\Temp\Work\Python\__Main projects\DTS Monitoring\TempAPI\project" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="TempAPI" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bcf5fc05-9824-4017-861e-e6b87136f8a3" name="Changes" comment="" />
+      <created>1703524395196</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703524395196</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Созданы post-функция для данных приходящих с прибора, get-функции для получения названий скважин и времен">
+      <option name="closed" value="true" />
+      <created>1703947663444</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1703947663444</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Добавлена функция для получения валидного интервала глубин">
+      <option name="closed" value="true" />
+      <created>1703951712675</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1703951712675</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Добавил функцию для получения данных о температурах, глубинах и времени. Поправил функции для поиска максимальной и минимальной валидных глубин">
+      <option name="closed" value="true" />
+      <created>1703960605718</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1703960605718</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Добавил комментарии к функциям и почистил лишние функции и импорты">
+      <option name="closed" value="true" />
+      <created>1703961505065</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1703961505065</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Добавил requirements и docker file для развертывания на сервере на gunicorn">
+      <option name="closed" value="true" />
+      <created>1704120410273</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1704120410273</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Добавил CORS чтобы делать запросы с JS">
+      <option name="closed" value="true" />
+      <created>1704789025038</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1704789025038</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Прописал сортировку полученных данных по времени и глубине через SQL">
+      <option name="closed" value="true" />
+      <created>1704864038040</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1704864038040</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Создал описание на OpenApi">
+      <option name="closed" value="true" />
+      <created>1705738510159</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1705738510159</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Создана новая ветка для обновления функционала под геотехнический мониторинг">
+      <option name="closed" value="true" />
+      <created>1716879939161</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1716879939161</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Созданы post-функция для данных приходящих с прибора, get-функции для получения названий скважин и времен" />
+    <MESSAGE value="Добавлена функция для получения валидного интервала глубин" />
+    <MESSAGE value="Добавил функцию для получения данных о температурах, глубинах и времени. Поправил функции для поиска максимальной и минимальной валидных глубин" />
+    <MESSAGE value="Добавил комментарии к функциям и почистил лишние функции и импорты" />
+    <MESSAGE value="Добавил requirements и docker file для развертывания на сервере на gunicorn" />
+    <MESSAGE value="Добавил CORS чтобы делать запросы с JS" />
+    <MESSAGE value="Прописал сортировку полученных данных по времени и глубине через SQL" />
+    <MESSAGE value="Создал описание на OpenApi" />
+    <MESSAGE value="Создана новая ветка для обновления функционала под геотехнический мониторинг" />
+    <option name="LAST_COMMIT_MESSAGE" value="Создана новая ветка для обновления функционала под геотехнический мониторинг" />
+  </component>
+</project>
