@@ -11,7 +11,7 @@ class DataWorker:
         pass
 
     @staticmethod
-    def _get_raw_last_data(well_name: str) -> list:
+    def _get_raw_last_data(well_name: str, start_interval: float, end_interval: float) -> list:
 
         """
         :param well_name: string with well name
@@ -25,8 +25,9 @@ class DataWorker:
                             SELECT DISTINCT time, depth, temp
                             FROM {0}
                             WHERE time = (SELECT MAX(time) FROM {0} WHERE place = '{1}') AND place = '{1}'
+                            AND depth >= {2} AND depth <= {3}
                             ORDER BY depth
-                            """.format(DATA_TAB, well_name)
+                            """.format(DATA_TAB, well_name, start_interval, end_interval)
                     cursor.execute(select)
                     result = cursor.fetchall()
                     return result
@@ -38,14 +39,14 @@ class DataWorker:
         trans_data = np.array(raw_data).T
         data_object = DataArray(
             time=trans_data[0][0],
-            depth=list(trans_data[1]),
+            depth=list(trans_data[1] - min(trans_data[1])),
             temp=list(trans_data[2]),
             place=well_name
         )
         return data_object
 
     @staticmethod
-    def get_last_data(well_name: str) -> DataArray:
-        raw_data = DataWorker._get_raw_last_data(well_name)
+    def get_last_data(well_name: str, start_interval: float, end_interval: float) -> DataArray:
+        raw_data = DataWorker._get_raw_last_data(well_name, start_interval, end_interval)
         data_object = DataWorker._process_raw_last_data(raw_data, well_name)
         return data_object

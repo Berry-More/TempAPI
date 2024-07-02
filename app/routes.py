@@ -12,7 +12,11 @@ def data_access():
     if request.method == 'GET':
         args = request.args
         try:
-            data = worker.get_last_data(args['well_name'])
+            data = worker.get_last_data(
+                args['well_name'],
+                float(args['start_interval']),
+                float(args['end_interval'])
+            )
             return jsonify(data), 200
         except ValueError:
             return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 400
