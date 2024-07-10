@@ -3,6 +3,7 @@ from flask import jsonify, request
 
 from Modules.DBWorker.WellWorker import WellWorker
 from Modules.DBWorker.DataWorker import DataWorker
+from Modules.DBWorker.BaselineWorker import BaselineWorker
 
 
 @app.route('/temperature/data', methods=['GET'])
@@ -28,8 +29,8 @@ def data_access():
             return jsonify({'time': None, 'depth': [], 'temp': [], 'place': None}), 522
 
 
-@app.route('/temperature/wells', methods=['GET', 'POST', 'DELETE'])
-def wells_access():
+@app.route('/temperature/well', methods=['GET', 'POST', 'DELETE'])
+def well_access():
     worker = WellWorker()
 
     if request.method == 'GET':
@@ -55,3 +56,28 @@ def wells_access():
             return 'deleted', 200
         except ConnectionError:
             return 'has not deleted', 522
+
+
+@app.route('/temperature/baseline', methods=['GET', 'POST'])
+def baseline_access():
+    worker = BaselineWorker()
+
+    if request.method == 'POST':
+        if request.json:
+            data_array = worker.read_lasio(request.json['data'], request.json['well_id'])
+            worker.update(data_array)
+            return 'created', 201
+
+    if request.method == 'GET':
+        try:
+            args = request.args
+            baseline = worker.get(
+                args['well_name'],
+                float(args['start_interval']),
+                float(args['end_interval'])
+            )
+            return jsonify({'baseline': baseline}), 200
+        except ValueError:
+            return jsonify({'baseline': None}), 404
+        except ConnectionError:
+            return jsonify({'baseline': None}), 522
