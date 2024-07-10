@@ -1,6 +1,5 @@
 import psycopg2
 import numpy as np
-import pandas as pd
 
 from psycopg2 import sql
 from psycopg2.extras import DictCursor
